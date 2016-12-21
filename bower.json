@@ -1,0 +1,13 @@
+{
+  "name": "breastfeeding-app-polymer",
+  "authors": [
+    "Jason LeMoine <github@lemoine.io>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.6.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.0.0"
+  }
+}

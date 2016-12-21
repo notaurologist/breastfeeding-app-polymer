@@ -1,0 +1,117 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="bf-timer">
+  <template>
+    <style>
+      .container {
+        align-items: center;
+        color: tomato;
+        display: flex;
+        justify-content: center;
+      }
+
+      .seconds {
+        height: 200px;
+        transform: rotate(-90deg);
+        width: 200px;
+      }
+
+      .track,
+      .progress {
+        stroke-dashoffset: 0;
+        stroke-width: 1em;
+      }
+
+      .track {
+        stroke: #ccc;
+      }
+
+      .progress {
+        stroke: currentColor;
+        transition: stroke-dashoffset 1s linear;
+      }
+
+      .minutes {
+        font-size: 4em;
+        left: 50%;
+        position: absolute;
+        transform: translateX(-50%);
+      }
+    </style>
+
+    <div class="container" on-tap="_toggleTimer">
+      <div class="minutes">[[_computeMinutes(seconds)]]</div>
+      <svg class="seconds">
+        <circle
+          class="track"
+          r="90"
+          cx="100"
+          cy="100"
+          fill="transparent"
+          stroke-dasharray$="[[maxOffset]]"
+          stroke-dashoffset="0"></circle>
+        <circle
+          class="progress"
+          style$="stroke-dashoffset: [[_computeStrokeDashoffset(maxOffset, seconds)]]"
+          r="90"
+          cx="100"
+          cy="100"
+          fill="transparent"
+          stroke-dasharray$="[[maxOffset]]"
+          stroke-dashoffset$="[[maxOffset]]"></circle>
+      </svg>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'bf-timer',
+
+      properties: {
+        timerId: Number,
+        maxOffset: {
+          type: Number,
+          value: 565.48,
+          readOnly: true,
+        },
+        start: Number,
+        seconds: {
+          type: Number,
+          value: 0,
+          notify: true,
+        },
+      },
+
+      detatched: function () {
+        clearTimeout(this.timerId);
+      },
+
+      _computeMinutes: function (seconds) {
+        return parseInt(seconds / 60, 10);
+      },
+
+      _computeStrokeDashoffset: function (maxOffset, seconds) {
+        return maxOffset - (seconds / 60) * Math.PI * 180;
+      },
+
+      _toggleTimer: function (evt) {
+        evt.preventDefault();
+        if (!this.timerId) {
+          this.start = performance.now();
+          this.timerId = setTimeout(this._progress.bind(this), 333);
+        } else {
+            clearTimeout(this.timerId);
+            // const finalTime = new Date(performance.now() - start);
+            // const seconds = finalTime.getSeconds();
+            // TODO: Do something with the final time
+        }
+      },
+
+      _progress: function () {
+        this.seconds = (performance.now() - this.start) / 1000;
+
+        this.timerId = setTimeout(this._progress.bind(this), 333);
+      },
+    });
+  </script>
+</dom-module>

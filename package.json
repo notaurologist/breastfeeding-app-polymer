@@ -1,0 +1,12 @@
+{
+  "name": "breastfeeding-app-polymer",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.12.0",
+    "eslint-plugin-html": "^1.7.0"
+  },
+  "scripts": {
+    "lint": "eslint . --ext js,html; exit 0;",
+    "test": "npm run lint && polymer test"
+  }
+}
