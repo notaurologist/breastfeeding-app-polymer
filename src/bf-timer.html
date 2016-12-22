@@ -18,7 +18,6 @@
 
       .track,
       .progress {
-        stroke-dashoffset: 0;
         stroke-width: 1em;
       }
 
@@ -28,7 +27,7 @@
 
       .progress {
         stroke: currentColor;
-        transition: stroke-dashoffset 0.333s linear;
+        transition: stroke-dashoffset 0.017s linear;
       }
 
       .minutes {
@@ -47,9 +46,7 @@
           r="90"
           cx="100"
           cy="100"
-          fill="transparent"
-          stroke-dasharray$="[[maxOffset]]"
-          stroke-dashoffset="0"></circle>
+          fill="transparent"></circle>
         <circle
           class="progress"
           style$="stroke-dashoffset: [[_computeStrokeDashoffset(maxOffset, seconds)]]"
@@ -57,8 +54,7 @@
           cx="100"
           cy="100"
           fill="transparent"
-          stroke-dasharray$="[[maxOffset]]"
-          stroke-dashoffset$="[[maxOffset]]"></circle>
+          stroke-dasharray$="[[maxOffset]]"></circle>
       </svg>
     </div>
   </template>
@@ -69,7 +65,7 @@
 
       properties: {
         active: Boolean,
-        timerId: Number,
+        requestId: Number,
         maxOffset: {
           type: Number,
           value: 565.48,
@@ -83,7 +79,7 @@
       },
 
       detached: function () {
-        window.cancelAnimationFrame(this.timerId);
+        window.cancelAnimationFrame(this.requestId);
       },
 
       _computeMinutes: function (seconds) {
@@ -98,10 +94,10 @@
       _toggleTimer: function (evt) {
         evt.preventDefault();
         if (!this.active) {
-          this.timerId = window.requestAnimationFrame(this._progress.bind(this));
+          this.requestId = window.requestAnimationFrame(this._progress.bind(this));
           this.active = true;
         } else {
-          window.cancelAnimationFrame(this.timerId);
+          window.cancelAnimationFrame(this.requestId);
           this.active = false;
           // const finalTime = new Date(performance.now() - start);
           // const seconds = finalTime.getSeconds();
@@ -117,7 +113,7 @@
 
         this.seconds = (ms - this.start) / 1000;
 
-        this.timerId = window.requestAnimationFrame(this._progress.bind(this));
+        this.requestId = window.requestAnimationFrame(this._progress.bind(this));
       },
     });
   </script>
