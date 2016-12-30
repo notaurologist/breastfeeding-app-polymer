@@ -27,7 +27,7 @@
 
       .progress {
         stroke: currentColor;
-        transition: stroke-dashoffset 0.017s linear;
+        transition: stroke-dashoffset 0.016s linear;
       }
 
       .minutes {
@@ -49,12 +49,12 @@
           fill="transparent"></circle>
         <circle
           class="progress"
-          style$="stroke-dashoffset: [[_computeStrokeDashoffset(maxOffset, seconds)]]"
+          style$="stroke-dashoffset: [[_computeStrokeDashoffset(seconds)]]"
           r="90"
           cx="100"
           cy="100"
           fill="transparent"
-          stroke-dasharray$="[[maxOffset]]"></circle>
+          stroke-dasharray$="[[_maxOffset]]"></circle>
       </svg>
     </div>
   </template>
@@ -64,13 +64,13 @@
       is: 'bf-timer',
 
       properties: {
-        active: Boolean,
-        requestId: Number,
-        maxOffset: {
+        _requestId: Number,
+        _maxOffset: {
           type: Number,
           value: 565.48,
           readOnly: true,
         },
+        active: Boolean,
         start: Number,
         seconds: {
           type: Number,
@@ -79,25 +79,25 @@
       },
 
       detached: function () {
-        window.cancelAnimationFrame(this.requestId);
+        window.cancelAnimationFrame(this._requestId);
       },
 
       _computeMinutes: function (seconds) {
         return Math.floor(seconds / 60);
       },
 
-      _computeStrokeDashoffset: function (maxOffset, seconds) {
+      _computeStrokeDashoffset: function (seconds) {
         // TODO: Tweak accuracy of this. Minutes change just before complete.
-        return maxOffset - (seconds / 60) * Math.PI * 180;
+        return this._maxOffset - (seconds / 60) * Math.PI * 180;
       },
 
       _toggleTimer: function (evt) {
         evt.preventDefault();
         if (!this.active) {
-          this.requestId = window.requestAnimationFrame(this._progress.bind(this));
+          this._requestId = window.requestAnimationFrame(this._progress.bind(this));
           this.active = true;
         } else {
-          window.cancelAnimationFrame(this.requestId);
+          window.cancelAnimationFrame(this._requestId);
           this.active = false;
           // const finalTime = new Date(performance.now() - start);
           // const seconds = finalTime.getSeconds();
@@ -106,14 +106,16 @@
       },
 
       _progress: function (ms) {
-        // TODO: Need to handle start/stop. e.g., multiple "start" times
+        // TODO: Need to handle start/stop.
+        // ms is just an ongoing timestamp (i.e., pausing doesn't reset it),
+        // so we need to remove the pause time from the counter.
         if (!this.start) {
           this.start = ms;
         }
 
         this.seconds = (ms - this.start) / 1000;
 
-        this.requestId = window.requestAnimationFrame(this._progress.bind(this));
+        this._requestId = window.requestAnimationFrame(this._progress.bind(this));
       },
     });
   </script>
