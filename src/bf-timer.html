@@ -1,11 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="bf-timer">
   <template>
+    <style include="shared-styles"></style>
     <style>
       .container {
         align-items: center;
-        color: tomato;
         display: flex;
         justify-content: center;
       }
@@ -70,7 +71,6 @@
           value: 565.48,
           readOnly: true,
         },
-        active: Boolean,
         start: Number,
         seconds: {
           type: Number,
@@ -82,33 +82,48 @@
         window.cancelAnimationFrame(this._requestId);
       },
 
+      /**
+       * Calculate the elapsed minutes.
+       *
+       * @param {number} seconds Seconds since timer started
+       */
       _computeMinutes: function (seconds) {
         return Math.floor(seconds / 60);
       },
 
+      /**
+       * Calculate the current stroke-dashoffset.
+       *
+       * @param {number} seconds Seconds since timer started
+       */
       _computeStrokeDashoffset: function (seconds) {
-        // TODO: Tweak accuracy of this. Minutes change just before complete.
         return this._maxOffset - (seconds / 60) * Math.PI * 180;
       },
 
+      /**
+       * Start/stop timer.
+       *
+       * @param {Object} evt Event data
+       * @emits {stop} Emits when timer stops
+       */
       _toggleTimer: function (evt) {
         evt.preventDefault();
-        if (!this.active) {
+        if (!this._requestId) {
           this._requestId = window.requestAnimationFrame(this._progress.bind(this));
-          this.active = true;
         } else {
           window.cancelAnimationFrame(this._requestId);
-          this.active = false;
-          // const finalTime = new Date(performance.now() - start);
-          // const seconds = finalTime.getSeconds();
-          // TODO: Do something with the final time
+          this.fire('stop', {
+            seconds: this.seconds,
+          });
         }
       },
 
+      /**
+       * Handle new animation frame.
+       *
+       * @param {number} ms Number of seconds since navigationStart
+       */
       _progress: function (ms) {
-        // TODO: Need to handle start/stop.
-        // ms is just an ongoing timestamp (i.e., pausing doesn't reset it),
-        // so we need to remove the pause time from the counter.
         if (!this.start) {
           this.start = ms;
         }

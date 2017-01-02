@@ -3,12 +3,22 @@
 
 <dom-module id="bf-app">
   <template>
-    <bf-timer></bf-timer>
+    <bf-timer on-stop="_handleTimerStop"></bf-timer>
   </template>
 
   <script>
     Polymer({
       is: 'bf-app',
+
+      /**
+       * Handle results of the timer.
+       *
+       * @param {Object} evt Event data
+       */
+      _handleTimerStop: function (evt) {
+        console.log(evt.detail.seconds);
+        // TODO: Store seconds somewhere
+      },
     });
   </script>
 </dom-module>
