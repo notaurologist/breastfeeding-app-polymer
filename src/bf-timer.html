@@ -39,7 +39,7 @@
       }
     </style>
 
-    <div class="container" on-tap="_toggleTimer">
+    <div class="container">
       <div class="minutes">[[_computeMinutes(seconds)]]</div>
       <svg class="seconds">
         <circle
@@ -76,6 +76,10 @@
           type: Number,
           value: 0,
         },
+      },
+
+      listeners: {
+        'tap': '_toggleTimer',
       },
 
       detached: function () {

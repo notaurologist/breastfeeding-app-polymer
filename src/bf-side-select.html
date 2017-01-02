@@ -1,0 +1,20 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="bf-side-select">
+  <template>
+    <div></div>
+  </template>
+  <script>
+    Polymer({
+      is: 'bf-side-select',
+
+      listeners: {
+        'swipe': '_handleSwipe',
+      },
+
+      _handleSwipe: function (evt) {
+        console.log(evt);
+      },
+    });
+  </script>
+</dom-module>

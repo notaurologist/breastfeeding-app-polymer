@@ -1,9 +1,11 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="bf-timer.html">
+<link rel="import" href="bf-side-select.html">
 
 <dom-module id="bf-app">
   <template>
     <bf-timer on-stop="_handleTimerStop"></bf-timer>
+    <bf-side-select></bf-side-select>
   </template>
 
   <script>
@@ -16,7 +18,7 @@
        * @param {Object} evt Event data
        */
       _handleTimerStop: function (evt) {
-        console.log(evt.detail.seconds);
+        console.log('elapsed seconds:', evt.detail.seconds);
         // TODO: Store seconds somewhere
       },
     });
