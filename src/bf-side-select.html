@@ -24,26 +24,27 @@
         border-right-width: 6px;
       }
     </style>
-    <div id="bfsideselect" class="container left"></div>
+    <div class$="container [[side]]"></div>
   </template>
   <script>
     Polymer({
       is: 'bf-side-select',
 
+      properties: {
+        side: String,
+      },
+
       listeners: {
         'track': '_handleTrack',
       },
 
+      /**
+       * Handle a user
+       */
       _handleTrack: function (evt) {
-        const xDelta = evt.detail.dx;
-        // TODO: Is there a better way to do the styles?
-        if (xDelta > 0) {
-          this.toggleClass('left', false, this.$.bfsideselect);
-          this.toggleClass('right', true, this.$.bfsideselect);
-        } else {
-          this.toggleClass('right', false, this.$.bfsideselect);
-          this.toggleClass('left', true, this.$.bfsideselect);
-        }
+        // TODO: Do we need to take more details into account to
+        // accurately detect a swipe (e.g., velocity, touchend)?
+        this.side = (evt.detail.dx > 0) ? 'right' : 'left';
       },
     });
   </script>
