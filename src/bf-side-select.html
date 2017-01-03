@@ -1,19 +1,49 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="bf-side-select">
   <template>
-    <div></div>
+    <style include="shared-styles"></style>
+    <style>
+      .container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-color: currentColor;
+        border-style: solid;
+        border-width: 0px;
+      }
+
+      .left {
+        border-left-width: 6px;
+      }
+
+      .right {
+        border-right-width: 6px;
+      }
+    </style>
+    <div id="bfsideselect" class="container left"></div>
   </template>
   <script>
     Polymer({
       is: 'bf-side-select',
 
       listeners: {
-        'swipe': '_handleSwipe',
+        'track': '_handleTrack',
       },
 
-      _handleSwipe: function (evt) {
-        console.log(evt);
+      _handleTrack: function (evt) {
+        const xDelta = evt.detail.dx;
+        // TODO: Is there a better way to do the styles?
+        if (xDelta > 0) {
+          this.toggleClass('left', false, this.$.bfsideselect);
+          this.toggleClass('right', true, this.$.bfsideselect);
+        } else {
+          this.toggleClass('right', false, this.$.bfsideselect);
+          this.toggleClass('left', true, this.$.bfsideselect);
+        }
       },
     });
   </script>
