@@ -1,14 +1,19 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
 <dom-module id="bf-timer">
   <template>
-    <style include="shared-styles"></style>
     <style>
+      :host {
+        color: tomato;
+      }
+
       .container {
         align-items: center;
         display: flex;
         justify-content: center;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 6px;
       }
 
       .seconds {
@@ -37,10 +42,18 @@
         position: absolute;
         transform: translateX(-50%);
       }
+
+      .left {
+        border-left-color: currentColor;
+      }
+
+      .right {
+        border-right-color: currentColor;
+      }
     </style>
 
-    <div class="container">
-      <div class="minutes">[[_computeMinutes(seconds)]]</div>
+    <div class$="container [[side]]">
+      <div class="minutes">[[minutes]]</div>
       <svg class="seconds">
         <circle
           class="track"
@@ -72,14 +85,20 @@
           readOnly: true,
         },
         start: Number,
+        minutes: {
+          type: Number,
+          computed: '_computeMinutes(seconds)',
+        },
         seconds: {
           type: Number,
           value: 0,
         },
+        side: String,
       },
 
       listeners: {
         'tap': '_toggleTimer',
+        'track': '_setSide',
       },
 
       detached: function () {
@@ -117,7 +136,8 @@
         } else {
           window.cancelAnimationFrame(this._requestId);
           this.fire('stop', {
-            seconds: this.seconds,
+            minutes: Math.round(this.minutes), // Deep accuracy not relevant here?
+            side: this.side,
           });
         }
       },
@@ -135,6 +155,17 @@
         this.seconds = (ms - this.start) / 1000;
 
         this._requestId = window.requestAnimationFrame(this._progress.bind(this));
+      },
+
+      /**
+       * Handle a user swipe.
+       *
+       * @param {Object} evt Event data
+       */
+      _setSide: function (evt) {
+        // TODO: Do we need to take more details into account to
+        // accurately detect a swipe (e.g., velocity, touchend)?
+        this.side = (evt.detail.dx > 0) ? 'right' : 'left';
       },
     });
   </script>
