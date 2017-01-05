@@ -33,6 +33,13 @@
         if (data) {
           this.feedings = (JSON.parse(data)).feedings;
         }
+
+        // Use some mock data
+        // this.feedings = fetch('../test/mock-feedings.json').then(function (response) {
+        //    return response.json().then(function (json) {
+        //      return json;
+        //    });
+        // });
       },
 
       _displayFeedingData: function (feedings) {
