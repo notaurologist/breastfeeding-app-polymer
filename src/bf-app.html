@@ -1,22 +1,30 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="bf-timer.html">
+<link rel="import" href="bf-history.html">
 
 <dom-module id="bf-app">
-  <iron-localstorage name="bf-storage"></iron-localstorage>
   <template>
     <bf-timer on-stop="_handleTimerStop"></bf-timer>
+    <bf-history></bf-history>
   </template>
 
   <script>
-    // TODO: All data really tied to one event,
-    // so stop listening to multiple. Consolidate.
-
     // TODO: Store data somewhere better than localStorage.
     Polymer({
       is: 'bf-app',
 
       properties: {
-        feeding: Object,
+        feedings: {
+          type: Array,
+          value: [],
+        },
+      },
+
+      ready: function () {
+        const data = window.localStorage.getItem('bf-storage');
+        if (data) {
+          this.feedings = (JSON.parse(data)).feedings;
+        }
       },
 
       /**
@@ -25,13 +33,12 @@
        * @param {Object} evt Event data
        */
       _handleTimerStop: function (evt) {
-        let {minutes, side} = evt.detail;
-
         // Don't store anything if we didn't even get to a minute
-        if (minutes > 0) {
+        // TODO: Should we allow a min higher than 0? (preferences)
+        if (evt.detail.minutes > 0) {
+          this.feedings.push(evt.detail);
           window.localStorage.setItem('bf-storage', JSON.stringify({
-            minutes,
-            side,
+            feedings: this.feedings,
           }));
         }
       },

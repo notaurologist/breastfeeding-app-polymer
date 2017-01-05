@@ -1,10 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="bf-timer">
   <template>
+    <style include="shared-styles"></style>
     <style>
       :host {
-        color: tomato;
+        color: var(--primaryColor);
       }
 
       .container {
@@ -84,6 +86,10 @@
           value: 565.48,
           readOnly: true,
         },
+        date: {
+          type: Number,
+          value: Date.now(),
+        },
         start: Number,
         minutes: {
           type: Number,
@@ -136,6 +142,7 @@
         } else {
           window.cancelAnimationFrame(this._requestId);
           this.fire('stop', {
+            date: this.date,
             minutes: Math.round(this.minutes), // Deep accuracy not relevant here?
             side: this.side,
           });

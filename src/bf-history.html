@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="bf-history">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      h2 {
+        color: var(--primaryColor);
+      }
+    </style>
+
+    <content>
+      <h2>Previous Feedings</h2>
+      [[_displayFeedingData(feedings)]]
+    </content>
+  </template>
+
+  <script src="../bower_components/moment/min/moment.min.js"></script>
+  <script>
+    Polymer({
+      is: 'bf-history',
+
+      properties: {
+        feedings: {
+          type: Array,
+          value: [],
+        },
+      },
+
+      ready: function () {
+        const data = window.localStorage.getItem('bf-storage');
+        if (data) {
+          this.feedings = (JSON.parse(data)).feedings;
+        }
+      },
+
+      _displayFeedingData: function (feedings) {
+        return feedings.map(function (feeding) {
+          // TODO: Using Moment for easy date handling, but it adds a bit to app size. Replace.
+          return `${moment(feeding.date).format('lll')}: ${feeding.minutes} minute(s), ${feeding.side} side`;
+        });
+      },
+    });
+  </script>
+</dom-module>
