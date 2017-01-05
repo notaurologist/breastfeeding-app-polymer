@@ -21,7 +21,7 @@
       },
 
       ready: function () {
-        const data = window.localStorage.getItem('bf-storage');
+        var data = window.localStorage.getItem('bf-storage');
         if (data) {
           this.feedings = (JSON.parse(data)).feedings;
         }

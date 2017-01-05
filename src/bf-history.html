@@ -29,7 +29,7 @@
       },
 
       ready: function () {
-        const data = window.localStorage.getItem('bf-storage');
+        var data = window.localStorage.getItem('bf-storage');
         if (data) {
           this.feedings = (JSON.parse(data)).feedings;
         }
@@ -45,7 +45,7 @@
       _displayFeedingData: function (feedings) {
         return feedings.map(function (feeding) {
           // TODO: Using Moment for easy date handling, but it adds a bit to app size. Replace.
-          return `${moment(feeding.date).format('lll')}: ${feeding.minutes} minute(s), ${feeding.side} side`;
+          return window.moment(feeding.date).format('lll') + ': ' + feeding.minutes + ' minute(s), ' + feeding.side + ' side';
         });
       },
     });

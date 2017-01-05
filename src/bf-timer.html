@@ -173,7 +173,7 @@
       _setSide: function (evt) {
         // TODO: Improve this. At least needs min distance and should
         // require a touchend.
-        let velocity = evt.detail.dx / (performance.now() - evt.timeStamp);
+        var velocity = evt.detail.dx / (performance.now() - evt.timeStamp);
         // Arbitrary threshold from Hammer.js
         if (Math.abs(velocity) > 0.3) {
           this.side = (evt.detail.dx > 0) ? 'right' : 'left';
