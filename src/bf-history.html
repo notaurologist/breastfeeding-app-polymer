@@ -42,6 +42,12 @@
         // });
       },
 
+      /**
+       * Output feeding data to page.
+       *
+       * @param {array} feedings Array of feeding data
+       * @return {string} Feeding data formatted for screen
+       */
       _displayFeedingData: function (feedings) {
         // TODO: If feedings not set/pending, this blows up
         return feedings.map(function (feeding) {
