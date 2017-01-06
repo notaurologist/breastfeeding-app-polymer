@@ -10,10 +10,10 @@
       }
     </style>
 
-    <div>
+    <template is="dom-if" if="{{feedings.length}}">
       <h2>Previous Feedings</h2>
       [[_displayFeedingData(feedings)]]
-    </div>
+    </template>
   </template>
 
   <script src="../bower_components/moment/min/moment.min.js"></script>
