@@ -84,7 +84,7 @@
         _requestId: Number,
         _maxOffset: {
           type: Number,
-          value: 565.48, // magic number :-(
+          value: Math.PI * 180,
           readOnly: true,
         },
         date: {
@@ -127,7 +127,7 @@
        * @param {number} seconds Seconds since timer started
        */
       _computeStrokeDashoffset: function (seconds) {
-        return this._maxOffset - (seconds / 60) * Math.PI * 180;
+        return this._maxOffset - (seconds / 60) * this._maxOffset;
       },
 
       /**
@@ -144,8 +144,8 @@
           window.cancelAnimationFrame(this._requestId);
           this.fire('stop', {
             date: this.date,
-            minutes: Math.round(this.minutes), // Deep accuracy not relevant here?
-            side: this.side,
+            minutes: Math.round(this.seconds / 60), // Deep accuracy not relevant here
+            side: this.side, // TODO: What if undefined?
           });
         }
       },
